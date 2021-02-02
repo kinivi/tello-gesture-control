@@ -1,0 +1,1 @@
+from gesture_detector.gesture_recognition import GestureRecognition
