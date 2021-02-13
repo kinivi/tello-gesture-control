@@ -71,6 +71,9 @@ class GestureRecognition:
         image = cv.flip(image, 1)  # Mirror display
         debug_image = copy.deepcopy(image)
 
+        # Saving gesture id for drone controlling
+        gesture_id = -1
+
         # Detection implementation #############################################################
         image = cv.cvtColor(image, cv.COLOR_BGR2RGB)
 
@@ -113,21 +116,24 @@ class GestureRecognition:
                     self.finger_gesture_history).most_common()
 
                 # Drawing part
-                debug_image = draw_bounding_rect(USE_BRECT, debug_image, brect)
+                debug_image = self._draw_bounding_rect(USE_BRECT, debug_image, brect)
                 debug_image = self._draw_landmarks(debug_image, landmark_list)
-                debug_image = draw_info_text(
+                debug_image = self._draw_info_text(
                     debug_image,
                     brect,
                     handedness,
                     self.keypoint_classifier_labels[hand_sign_id],
-                    self.point_history_classifier_labels[most_common_fg_id[0][0]],
+                    self.point_history_classifier_labels[most_common_fg_id[0][0]]
                 )
+
+                # Saving gesture
+                gesture_id = hand_sign_id
         else:
             self.point_history.append([0, 0])
 
         debug_image = self.draw_point_history(debug_image, self.point_history)
 
-        return debug_image
+        return debug_image, gesture_id
 
     def draw_point_history(self, image, point_history):
         for index, point in enumerate(point_history):
@@ -154,10 +160,6 @@ class GestureRecognition:
                            cv.LINE_AA)
         return image
 
-
-
-
-
     def _calc_bounding_rect(self, image, landmarks):
         image_width, image_height = image.shape[1], image.shape[0]
 
@@ -175,7 +177,6 @@ class GestureRecognition:
 
         return [x, y, x + w, y + h]
 
-
     def _calc_landmark_list(self, image, landmarks):
         image_width, image_height = image.shape[1], image.shape[0]
 
@@ -190,7 +191,6 @@ class GestureRecognition:
             landmark_point.append([landmark_x, landmark_y])
 
         return landmark_point
-
 
     def _pre_process_landmark(self, landmark_list):
         temp_landmark_list = copy.deepcopy(landmark_list)
@@ -217,7 +217,6 @@ class GestureRecognition:
         temp_landmark_list = list(map(normalize_, temp_landmark_list))
 
         return temp_landmark_list
-
 
     def _pre_process_point_history(self, image, point_history):
         image_width, image_height = image.shape[1], image.shape[0]
@@ -428,50 +427,48 @@ class GestureRecognition:
 
         return image
 
+    def _draw_info_text(self, image, brect, handedness, hand_sign_text,
+                        finger_gesture_text):
+        cv.rectangle(image, (brect[0], brect[1]), (brect[2], brect[1] - 22),
+                     (0, 0, 0), -1)
 
-def draw_bounding_rect(use_brect, image, brect):
-    if use_brect:
-        # Outer rectangle
-        cv.rectangle(image, (brect[0], brect[1]), (brect[2], brect[3]),
-                     (0, 0, 0), 1)
+        info_text = handedness.classification[0].label[0:]
+        if hand_sign_text != "":
+            info_text = info_text + ':' + hand_sign_text
+        cv.putText(image, info_text, (brect[0] + 5, brect[1] - 4),
+                   cv.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 1, cv.LINE_AA)
 
-    return image
-
-
-def draw_info_text(image, brect, handedness, hand_sign_text,
-                   finger_gesture_text):
-    cv.rectangle(image, (brect[0], brect[1]), (brect[2], brect[1] - 22),
-                 (0, 0, 0), -1)
-
-    info_text = handedness.classification[0].label[0:]
-    if hand_sign_text != "":
-        info_text = info_text + ':' + hand_sign_text
-    cv.putText(image, info_text, (brect[0] + 5, brect[1] - 4),
-               cv.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 1, cv.LINE_AA)
-
-    if finger_gesture_text != "":
-        cv.putText(image, "Finger Gesture:" + finger_gesture_text, (10, 60),
-                   cv.FONT_HERSHEY_SIMPLEX, 1.0, (0, 0, 0), 4, cv.LINE_AA)
-        cv.putText(image, "Finger Gesture:" + finger_gesture_text, (10, 60),
-                   cv.FONT_HERSHEY_SIMPLEX, 1.0, (255, 255, 255), 2,
-                   cv.LINE_AA)
-
-    return image
-
-
-def draw_info(image, fps, mode, number):
-    cv.putText(image, "FPS:" + str(fps), (10, 30), cv.FONT_HERSHEY_SIMPLEX,
-               1.0, (0, 0, 0), 4, cv.LINE_AA)
-    cv.putText(image, "FPS:" + str(fps), (10, 30), cv.FONT_HERSHEY_SIMPLEX,
-               1.0, (255, 255, 255), 2, cv.LINE_AA)
-
-    mode_string = ['Logging Key Point', 'Logging Point History']
-    if 1 <= mode <= 2:
-        cv.putText(image, "MODE:" + mode_string[mode - 1], (10, 90),
-                   cv.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 1,
-                   cv.LINE_AA)
-        if 0 <= number <= 9:
-            cv.putText(image, "NUM:" + str(number), (10, 110),
-                       cv.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 1,
+        if finger_gesture_text != "":
+            cv.putText(image, "Finger Gesture:" + finger_gesture_text, (10, 60),
+                       cv.FONT_HERSHEY_SIMPLEX, 1.0, (0, 0, 0), 4, cv.LINE_AA)
+            cv.putText(image, "Finger Gesture:" + finger_gesture_text, (10, 60),
+                       cv.FONT_HERSHEY_SIMPLEX, 1.0, (255, 255, 255), 2,
                        cv.LINE_AA)
-    return image
+
+        return image
+
+    def _draw_bounding_rect(self, use_brect, image, brect):
+        if use_brect:
+            # Outer rectangle
+            cv.rectangle(image, (brect[0], brect[1]), (brect[2], brect[3]),
+                         (0, 0, 0), 1)
+
+        return image
+
+
+class GestureBuffer:
+    def __init__(self, buffer_len=10):
+        self.buffer_len = buffer_len
+        self._buffer = deque(maxlen=buffer_len)
+
+    def add_gesture(self, gesture_id):
+        self._buffer.append(gesture_id)
+
+    def get_gesture(self):
+        counter = Counter(self._buffer).most_common()
+        if counter[0][1] >= (self.buffer_len - 1):
+            self._buffer.clear()
+            return counter[0][0]
+        else:
+            return -1
+        # return self._buffer
