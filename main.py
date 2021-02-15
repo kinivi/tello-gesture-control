@@ -8,7 +8,7 @@ from gestures.tello_gesture_controller import TelloGestureController
 from utils import CvFpsCalc
 
 from djitellopy import Tello
-from gestures import GestureRecognition, GestureBuffer
+from gestures import *
 
 
 def get_args():
@@ -19,6 +19,7 @@ def get_args():
     parser.add("--device", type=int)
     parser.add("--width", help='cap width', type=int)
     parser.add("--height", help='cap height', type=int)
+    parser.add("--is_keyboard", help='To use Keyboard control by default', type=bool)
     parser.add('--use_static_image_mode', action='store_true', help='True if running on photos')
     parser.add("--min_detection_confidence",
                help='min_detection_confidence',
@@ -35,6 +36,7 @@ def get_args():
 def main():
     # Argument parsing
     args = get_args()
+    KEYBOARD_CONTROL = args.is_keyboard
 
     # Camera preparation
     tello = Tello()
@@ -48,7 +50,10 @@ def main():
 
     cap = tello.get_frame_read()
 
-    tello_controller = TelloGestureController(tello)
+    # Init Tello Controllers
+    gesture_controller = TelloGestureController(tello)
+    keyboard_controller = TelloKeyboardController(tello)
+
     gesture_detector = GestureRecognition(args.use_static_image_mode, args.min_detection_confidence,
                                           args.min_tracking_confidence)
     gesture_buffer = GestureBuffer(buffer_len=5)
@@ -66,9 +71,13 @@ def main():
         tello.move_forward(0)
 
         # Process Key (ESC: end)
-        key = cv.waitKey(10)
+        key = cv.waitKey(1) & 0xff
         if key == 27:  # ESC
             break
+        elif key == ord('k'):
+            KEYBOARD_CONTROL = True
+        elif key == ord('g'):
+            KEYBOARD_CONTROL = False
 
         # Camera capture
         image = cap.frame
@@ -76,12 +85,14 @@ def main():
         debug_image, gesture_id = gesture_detector.recognize(image)
         debug_image = gesture_detector.draw_info(debug_image, fps, mode, number)
 
-        gesture_buffer.add_gesture(gesture_id)
+        if KEYBOARD_CONTROL:
+            keyboard_controller.control(key)
+        else:
+            gesture_buffer.add_gesture(gesture_id)
+            gesture_controller.gesture_control(gesture_buffer)
 
         # Screen reflection
         cv.imshow('Hand Gesture Recognition', debug_image)
-
-        tello_controller.gesture_control(gesture_buffer)
 
     tello.land()
     tello.end()
