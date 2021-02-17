@@ -10,6 +10,8 @@ from utils import CvFpsCalc
 from djitellopy import Tello
 from gestures import *
 
+import threading
+
 
 def get_args():
     print('## Reading configuration ##')
@@ -34,6 +36,10 @@ def get_args():
 
 
 def main():
+    # init global vars
+    global gesture_buffer
+    global gesture_id
+
     # Argument parsing
     args = get_args()
     KEYBOARD_CONTROL = args.is_keyboard
@@ -58,6 +64,14 @@ def main():
                                           args.min_tracking_confidence)
     gesture_buffer = GestureBuffer(buffer_len=5)
 
+    def tello_control(key, keyboard_controller, gesture_controller):
+        global gesture_buffer
+
+        if KEYBOARD_CONTROL:
+            keyboard_controller.control(key)
+        else:
+            gesture_controller.gesture_control(gesture_buffer)
+
     # FPS Measurement
     cv_fps_calc = CvFpsCalc(buffer_len=10)
 
@@ -68,7 +82,7 @@ def main():
 
     while True:
         fps = cv_fps_calc.get()
-        tello.move_forward(0)
+        # tello.send_command_without_return("go 0 0 0 0")
 
         # Process Key (ESC: end)
         key = cv.waitKey(1) & 0xff
@@ -83,13 +97,12 @@ def main():
         image = cap.frame
 
         debug_image, gesture_id = gesture_detector.recognize(image)
-        debug_image = gesture_detector.draw_info(debug_image, fps, mode, number)
+        gesture_buffer.add_gesture(gesture_id)
 
-        if KEYBOARD_CONTROL:
-            keyboard_controller.control(key)
-        else:
-            gesture_buffer.add_gesture(gesture_id)
-            gesture_controller.gesture_control(gesture_buffer)
+        #Start control thread
+        threading.Thread(target=tello_control, args=(key, keyboard_controller, gesture_controller, )).start()
+
+        debug_image = gesture_detector.draw_info(debug_image, fps, mode, number)
 
         # Screen reflection
         cv.imshow('Hand Gesture Recognition', debug_image)
