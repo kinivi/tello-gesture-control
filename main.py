@@ -39,6 +39,7 @@ def main():
     # init global vars
     global gesture_buffer
     global gesture_id
+    global battery_status
 
     # Argument parsing
     args = get_args()
@@ -49,10 +50,9 @@ def main():
     tello.connect()
     tello.streamon()
 
-    print(tello.get_battery())
 
     # Take-off drone
-    tello.takeoff()
+    # tello.takeoff()
 
     cap = tello.get_frame_read()
 
@@ -72,17 +72,21 @@ def main():
         else:
             gesture_controller.gesture_control(gesture_buffer)
 
+    def tello_battery(tello):
+        global battery_status
+        battery_status = tello.get_battery()
+
     # FPS Measurement
     cv_fps_calc = CvFpsCalc(buffer_len=10)
 
     mode = 0
     number = -1
+    battery_status = -1
 
     tello.move_down(20)
 
     while True:
         fps = cv_fps_calc.get()
-        # tello.send_command_without_return("go 0 0 0 0")
 
         # Process Key (ESC: end)
         key = cv.waitKey(1) & 0xff
@@ -90,6 +94,7 @@ def main():
             break
         elif key == ord('k'):
             KEYBOARD_CONTROL = True
+            tello.send_rc_control(0, 0, 0, 0)  # Stop Continous moving
         elif key == ord('g'):
             KEYBOARD_CONTROL = False
 
@@ -99,12 +104,15 @@ def main():
         debug_image, gesture_id = gesture_detector.recognize(image)
         gesture_buffer.add_gesture(gesture_id)
 
-        #Start control thread
-        threading.Thread(target=tello_control, args=(key, keyboard_controller, gesture_controller, )).start()
+        # Start control thread
+        threading.Thread(target=tello_control, args=(key, keyboard_controller, gesture_controller,)).start()
+        threading.Thread(target=tello_battery, args=(tello,)).start()
 
         debug_image = gesture_detector.draw_info(debug_image, fps, mode, number)
 
-        # Screen reflection
+        # Battery status and image rendering
+        cv.putText(debug_image, "Battery: {}".format(battery_status), (5, 720 - 5),
+                   cv.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
         cv.imshow('Hand Gesture Recognition', debug_image)
 
     tello.land()

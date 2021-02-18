@@ -29,11 +29,11 @@ def get_args():
     parser.add_argument("--min_detection_confidence",
                         help='min_detection_confidence',
                         type=float,
-                        default=0.5)
+                        default=0.7)
     parser.add_argument("--min_tracking_confidence",
                         help='min_tracking_confidence',
                         type=int,
-                        default=0.5)
+                        default=0.7)
 
     args = parser.parse_args()
 

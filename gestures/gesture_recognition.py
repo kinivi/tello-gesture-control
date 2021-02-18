@@ -17,7 +17,7 @@ from model import PointHistoryClassifier
 
 
 class GestureRecognition:
-    def __init__(self, use_static_image_mode=False, min_detection_confidence=0.7, min_tracking_confidence=0.5,
+    def __init__(self, use_static_image_mode=False, min_detection_confidence=0.7, min_tracking_confidence=0.7,
                  history_length=16):
         self.use_static_image_mode = use_static_image_mode
         self.min_detection_confidence = min_detection_confidence
@@ -465,10 +465,9 @@ class GestureBuffer:
         self._buffer.append(gesture_id)
 
     def get_gesture(self):
-        # print(self._buffer)
         counter = Counter(self._buffer).most_common()
         if counter[0][1] >= (self.buffer_len - 1):
             self._buffer.clear()
             return counter[0][0]
         else:
-            return -1
+            return
