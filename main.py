@@ -64,7 +64,7 @@ def main():
 
 
     # Take-off drone
-    tello.takeoff()
+    # tello.takeoff()
 
     cap = tello.get_frame_read()
 
