@@ -63,7 +63,7 @@ class GestureRecognition:
         return hands, keypoint_classifier, keypoint_classifier_labels, \
                point_history_classifier, point_history_classifier_labels
 
-    def recognize(self, image):
+    def recognize(self, image, number=-1, mode=0):
 
         # TODO: Move constants to other place
         USE_BRECT = True
@@ -95,6 +95,10 @@ class GestureRecognition:
                     landmark_list)
                 pre_processed_point_history_list = self._pre_process_point_history(
                     debug_image, self.point_history)
+
+                # Write to the dataset file
+                self._logging_csv(number, mode, pre_processed_landmark_list,
+                                  pre_processed_point_history_list)
 
                 # Hand sign classification
                 hand_sign_id = self.keypoint_classifier(pre_processed_landmark_list)
@@ -159,6 +163,22 @@ class GestureRecognition:
                            cv.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 1,
                            cv.LINE_AA)
         return image
+
+    def _logging_csv(self, number, mode, landmark_list, point_history_list):
+        if mode == 0:
+            pass
+        if mode == 1 and (0 <= number <= 9):
+            print("WRITE")
+            csv_path = 'model/keypoint_classifier/keypoint.csv'
+            with open(csv_path, 'a', newline="") as f:
+                writer = csv.writer(f)
+                writer.writerow([number, *landmark_list])
+        if mode == 2 and (0 <= number <= 9):
+            csv_path = 'model/point_history_classifier/point_history.csv'
+            with open(csv_path, 'a', newline="") as f:
+                writer = csv.writer(f)
+                writer.writerow([number, *point_history_list])
+        return
 
     def _calc_bounding_rect(self, image, landmarks):
         image_width, image_height = image.shape[1], image.shape[0]

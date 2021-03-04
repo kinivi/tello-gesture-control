@@ -34,6 +34,17 @@ def get_args():
 
     return args
 
+def select_mode(key, mode):
+    number = -1
+    if 48 <= key <= 57:  # 0 ~ 9
+        number = key - 48
+    if key == 110:  # n
+        mode = 0
+    if key == 107:  # k
+        mode = 1
+    if key == 104:  # h
+        mode = 2
+    return number, mode
 
 def main():
     # init global vars
@@ -44,6 +55,7 @@ def main():
     # Argument parsing
     args = get_args()
     KEYBOARD_CONTROL = args.is_keyboard
+    WRITE_CONTROL = False
 
     # Camera preparation
     tello = Tello()
@@ -93,15 +105,27 @@ def main():
         if key == 27:  # ESC
             break
         elif key == ord('k'):
+            mode=0
             KEYBOARD_CONTROL = True
-            tello.send_rc_control(0, 0, 0, 0)  # Stop Continous moving
+            WRITE_CONTROL = False
+            tello.send_rc_control(0, 0, 0, 0)  # Stop moving
         elif key == ord('g'):
             KEYBOARD_CONTROL = False
+        elif key == ord('n'):
+            mode=1
+            WRITE_CONTROL = True
+            KEYBOARD_CONTROL = True
+
+        if WRITE_CONTROL:
+            number = -1
+            if 48 <= key <= 57:  # 0 ~ 9
+                number = key - 48
+
 
         # Camera capture
         image = cap.frame
 
-        debug_image, gesture_id = gesture_detector.recognize(image)
+        debug_image, gesture_id = gesture_detector.recognize(image, number, mode)
         gesture_buffer.add_gesture(gesture_id)
 
         # Start control thread
