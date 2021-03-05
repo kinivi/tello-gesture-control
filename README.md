@@ -7,7 +7,7 @@
 
 # Reference
 * [MediaPipe](https://github.com/google/mediapipe)
-* [MediaPipe Hand gesture recognition](https://github.com/Kazuhito00/hand-gesture-recognition-using-mediapipe)
+* [MediaPipe Hand gesture recognition (by Kazuhito00)](https://github.com/Kazuhito00/hand-gesture-recognition-using-mediapipe)
 * [Tello SDK python interface](https://github.com/damiafuentes/DJITelloPy)
 
 # Author
