@@ -8,12 +8,12 @@
     1. [Install pip packages](#1.-Installing-pip-packages)
     2. [Connect and test Tello](#2.-Connect-Tello)
 3. [Usage](#Usage)
-    1. [Keyboard control](#Keyboard control)
-    2. [Gesture control](#Gesture control)
+    * [Keyboard control](#Keyboard control)
+    * [Gesture control](#Gesture control)
 4. [Adding new gestures](#Adding new gestures)
-    1. [Technical description](#Technical details of gesture detector)
-    2. [Creating dataset](#Creating dataset with new gestures)
-    3. [Retrain model](#Notebook for retraining model)
+    * [Technical description](#Technical details of gesture detector)
+    * [Creating dataset](#Creating dataset with new gestures)
+    * [Retrain model](#Notebook for retraining model)
 5. [Repository structure](#Repository structure)
     
 ## Introduction
