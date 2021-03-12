@@ -12,12 +12,17 @@
     2. [Gesture control](#Gesture control)
 4. [Adding new gestures](#Adding new gestures)
     1. [Technical description](#Technical details of gesture detector)
-    2. [Creating dataset](#Creating dataset with new geastures)
+    2. [Creating dataset](#Creating dataset with new gestures)
     3. [Retrain model](#Notebook for retraining model)
 5. [Repository structure](#Repository structure)
     
 ## Introduction
 ...
+The main goal of this project is to control drone using hand gestures without any gloves or additional equipment.
+Just camera on the drone or your smartphone(soon), laptop and human hand.
+
+**laptop+drone+hand.img**
+
 ## Setup
 ### 1. Installing pip packages
 First, we need to install python dependencies. Make sure you that you are using `python3.7`
@@ -34,7 +39,6 @@ mediapipe == 0.8.2
 
 Install
 ```sh
-# requirements.txt
 pip3 install -r requirements.txt
 ```
 ### 2. Connect Tello
@@ -42,7 +46,7 @@ Turn on drone and connect computer to its WiFi
 
 Next, run the following code to verify connectivity
 
-wifi.png
+**wifi.png**
 
 ```sh
 python3 tests/test_connection.py
@@ -51,16 +55,29 @@ python3 tests/test_connection.py
 On successful connection
 
 ```json
+1. Connection test:
 Send command: command
+Response: b'ok'
+
+
+2. Video stream test:
+Send command: streamon
 Response: b'ok'
 ```
 
 If you get such output, you may need to check your connection with the drone
 
 ```json
+1. Connection test:
 Send command: command
 Timeout exceed on command command
 Command command was unsuccessful. Message: False
+
+
+2. Video stream test:
+Send command: streamon
+Timeout exceed on command streamon
+Command streamon was unsuccessful. Message: False
 ```
 
 ## Usage
@@ -74,30 +91,33 @@ python3 main.py
 
 This script will start the python window with visualization like this:
 
-WINDOW.img
+**WINDOW.img**
 
 ### Keyboard control
 (To control the drone with your keyboard, first press the `Left Shift` key.)
 
 The following is a list of keys and action description -
 
-* `Left Shift` -> Toggle Keyboard controls
-* `Right Shft` -> Take off drone
+* `k` -> Toggle Keyboard controls
+* `g` -> Toggle Gesture controls
+* `Left Shift` -> Take off drone #TODO
 * `Space` -> Land drone
-* `Up arrow` -> Increase Altitude
-* `Down arrow` -> Decrease Altitude
-* `Left arrow` -> Pan left
-* `Right arrow` -> Pan right
 * `w` -> Move forward
+* `s` -> Move back
 * `a` -> Move left
-* `s` -> Move down
 * `d` -> Move right
+* `e` -> Rotate clockwise
+* `q` -> Rotate counter-clockwise
+* `r` -> Move up
+* `f` -> Move down
+* `Esc` -> End program and land the drone 
+
 
 ### Gesture control 
 
 By pressing `g` you activate gesture control mode. Here is a full list of gestures that are available now.
 
-GESTURES_IMAGE.img
+**GESTURES_IMAGE.img**
 
 ## Adding new gestures
 Hand recognition detector can add and change training data to retrain the model on the own gestures. But before this,
@@ -106,27 +126,27 @@ there are technical details of the detector to understand how it works and how i
 Mediapipe Hand keypoints recognition is returning 3D coordinated of 20 hand landmarks. For our
 model we will use only 2D coordinates.
 
-landmarks.png
+**landmarks.png**
 
 Than, this points are preprocessed for training the model in the following way.
 
-preprocessing.png
+**preprocessing.png**
 
-After that, we can use data to train our model. Keypoint calssifier is a simple Neural network with such 
+After that, we can use data to train our model. Keypoint classifier is a simple Neural network with such 
 structure
 
-neural_network_structure.png 
+**neural_network_structure.png** 
 
-*you can check how the structure was formed 
+_check [here](#Grid-Search) to understand how the architecture was selected_
 ### Creating dataset with new gestures
 Press "k" to enter the mode to save key points（displayed as 「MODE:Logging Key Point」）
 
-mode.img
+**mode.img**
 
 If you press "0" to "9", the key points will be added to "model/keypoint_classifier/keypoint.csv" as shown below.
 1st column: Pressed number (used as class ID), 2nd and subsequent columns: Key point coordinates
 
-table.img
+**table.img**
 
 In the initial state, 7 types of learning data are included as was shown [here](#Gesture control). If necessary, add 3 or later, or delete the existing data of csv to prepare the training data.
 ### Notebook for retraining model
@@ -134,18 +154,67 @@ Open "[Keypoint_model_training.ipynb](Keypoint_model_training.ipynb)" in Jupyter
 Change the number of training data classes,the value of "NUM_CLASSES = 3", and path to teh dataset. Then, execute all cells
 and download `.tflite` model
 
-showgif.gif
+**showgif.gif**
 
 Do not forget to modify or add labels in `"model/keypoint_classifier/keypoint_classifier_label.csv"`
 
-Bonus
+#### Grid Search
 
 The last part of the notebook is a grid search for model using TensorBoard. Run the GridSearch part of the notebook to
 get test result with different parameters
 
-grid_search.img
+**grid_search.img**
 
 ## Repository structure
+<pre>
+│  main.py
+│  Keypoint_model_training.ipynb
+│  config.txt
+│  requirements.txt
+│  
+├─model
+│  └─keypoint_classifier
+│      │  keypoint.csv
+│      │  keypoint_classifier.hdf5
+│      │  keypoint_classifier.py
+│      │  keypoint_classifier.tflite
+│      └─ keypoint_classifier_label.csv
+│ 
+├─gestures
+│   │  gesture_recognition.py
+│   │  tello_gesture_controller.py
+│   └─ tello_keyboard_controller.py
+│          
+├─tests
+│   └─connection_test.py
+│ 
+└─utils
+    └─cvfpscalc.py
+</pre>
+### app.py
+Main app which controls functionality of drone control and gesture recognition<br>
+App also includes mode to collect training data for adding new gestures.<br>
+
+### keypoint_classification.ipynb
+This is a model training script for hand sign recognition.
+
+### model/keypoint_classifier
+This directory stores files related to gesture recognition.<br>
+
+* Training data(keypoint.csv)
+* Trained model(keypoint_classifier.tflite)
+* Label data(keypoint_classifier_label.csv)
+* Inference module(keypoint_classifier.py)
+
+### gestures/
+This directory stores files related to drone controllers and gesture modules.<br>
+
+* Keyboard controller (tello_keyboard_controller.py)
+* Gesture controller(tello_keyboard_controller.py)
+* Gesture recognition module(keypoint_classifier_label.csv)
+
+### utils/cvfpscalc.py
+Module for FPS measurement.
 
 # TODO
 - [ ] Motion gesture support (LSTM)
