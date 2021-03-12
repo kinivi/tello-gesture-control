@@ -44,9 +44,9 @@ pip3 install -r requirements.txt
 ### 2. Connect Tello
 Turn on drone and connect computer to its WiFi
 
-Next, run the following code to verify connectivity
+<img width="346" alt="wifi_connection" src="https://user-images.githubusercontent.com/13486777/110932822-a7b30f00-8334-11eb-9759-864c3dce652d.png">
 
-**wifi.png**
+Next, run the following code to verify connectivity
 
 ```sh
 python3 tests/test_connection.py
@@ -117,7 +117,8 @@ The following is a list of keys and action description -
 
 By pressing `g` you activate gesture control mode. Here is a full list of gestures that are available now.
 
-**GESTURES_IMAGE.img**
+![gestures](https://user-images.githubusercontent.com/13486777/110933057-f1035e80-8334-11eb-8458-988af973804e.JPG)
+
 
 ## Adding new gestures
 Hand recognition detector can add and change training data to retrain the model on the own gestures. But before this,
@@ -126,7 +127,8 @@ there are technical details of the detector to understand how it works and how i
 Mediapipe Hand keypoints recognition is returning 3D coordinated of 20 hand landmarks. For our
 model we will use only 2D coordinates.
 
-**landmarks.png**
+![landmarks_list](https://user-images.githubusercontent.com/13486777/110933339-49d2f700-8335-11eb-9588-5f68a2677ff0.png)
+
 
 Than, this points are preprocessed for training the model in the following way.
 
