@@ -139,7 +139,14 @@ structure
 
 _check [here](#Grid-Search) to understand how the architecture was selected_
 ### Creating dataset with new gestures
-Press "k" to enter the mode to save key points（displayed as 「MODE:Logging Key Point」）
+First, pull datasets from Git LFS. [Here](https://github.com/git-lfs/git-lfs/wiki/Installation) is the instruction how 
+to install LFS. Then, run the command to pull default csv files
+```sh
+git lfs install
+git lfs pull
+```
+
+After that, run `main.py` and press "k" to enter the mode to save key points（displayed as 「MODE:Logging Key Point」）
 
 **mode.img**
 
