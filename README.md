@@ -17,7 +17,9 @@
 5. [Repository structure](#Repository-structure)
     
 ## Introduction
-...
+
+![ezgif com-optimize](https://user-images.githubusercontent.com/13486777/111168690-fb2e9280-85aa-11eb-894f-fe70633072fd.gif)
+
 The main goal of this project is to control drone using hand gestures without any gloves or additional equipment.
 Just camera on the drone or your smartphone(soon), laptop and human hand.
 
@@ -45,6 +47,7 @@ pip3 install -r requirements.txt
 Turn on drone and connect computer to its WiFi
 
 <img width="346" alt="wifi_connection" src="https://user-images.githubusercontent.com/13486777/110932822-a7b30f00-8334-11eb-9759-864c3dce652d.png">
+
 
 Next, run the following code to verify connectivity
 
