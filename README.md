@@ -1,6 +1,6 @@
-# DJI Tello Visual Gesture control
+# DJI Tello Hand Gesture control
 
-The main goal of this project is to control drone using hand gestures without any gloves or additional equipment.
+The main goal of this project is to control the drone using hand gestures without any gloves or additional equipment.
 Just camera on the drone or your smartphone(soon), laptop and human hand.<br>
 
 <img alt="demo_gif" src="https://user-images.githubusercontent.com/13486777/111168690-fb2e9280-85aa-11eb-894f-fe70633072fd.gif">
@@ -21,11 +21,13 @@ Just camera on the drone or your smartphone(soon), laptop and human hand.<br>
 5. [Repository structure](#Repository-structure)
 
 ## Introduction
-This project lies on two main parts - DJI Tello drone and Mediapipe fast hand keypoints recognition.<br> 
-DJI Tello is a perfect drone for any kind of programming experiments. It has rich Python API (also Swift is available) which helps to almost fully control drone and utilise its camera for Computer vision.<br>
-On the other hand - Mediapipe. It is an amazing ML platform with many robust solutions like Face mesh, Hand Keypoints detection and Objectron. Moreover, their model can be used on mobile platform with on-device acceleration.
+This project relies on two main parts - DJI Tello drone and Mediapipe fast hand keypoints recognition.
 
-Going back to this project, here is a setup that you need:
+DJI Tello is a perfect drone for any kind of programming experiments. It has a rich Python API (also Swift is available) which helps to almost fully control a drone, create drone swarms and utilise its camera for Computer vision.
+
+Mediapipe is an amazing ML platform with many robust solutions like Face mesh, Hand Keypoints detection and Objectron. Moreover, their model can be used on the mobile platforms with on-device acceleration.
+
+Here is a starter-pack that you need:
 
 <img alt="starter_pack" width="80%" src="https://user-images.githubusercontent.com/13486777/111294166-b65e3680-8652-11eb-8225-c1fb1e5b867d.JPG">
 
@@ -137,7 +139,7 @@ model we will use only 2D coordinates.
 <img alt="gestures_list" width="80%" src="https://user-images.githubusercontent.com/13486777/110933339-49d2f700-8335-11eb-9588-5f68a2677ff0.png">
 
 
-Than, this points are preprocessed for training the model in the following way.
+Then, these points are preprocessed for training the model in the following way.
 
 <img alt="preprocessing" width="80%" src="https://user-images.githubusercontent.com/13486777/111294503-11902900-8653-11eb-9856-a50fe96e750e.png">
 
@@ -151,14 +153,14 @@ structure
 
 _check [here](#Grid-Search) to understand how the architecture was selected_
 ### Creating dataset with new gestures
-First, pull datasets from Git LFS. [Here](https://github.com/git-lfs/git-lfs/wiki/Installation) is the instruction how 
+First, pull datasets from Git LFS. [Here](https://github.com/git-lfs/git-lfs/wiki/Installation) is the instruction of how 
 to install LFS. Then, run the command to pull default csv files
 ```sh
 git lfs install
 git lfs pull
 ```
 
-After that, run `main.py` and press "k" to enter the mode to save key points
+After that, run `main.py` and press "n" to enter the mode to save key points
 (displayed as **MODE:Logging Key Point**）
 
 <img width="60%" alt="writing_mode" src="https://user-images.githubusercontent.com/13486777/111301228-a185a100-865a-11eb-8a3c-fa4d9ee96d6a.png">
@@ -183,8 +185,7 @@ and download `.tflite` model
 Do not forget to modify or add labels in `"model/keypoint_classifier/keypoint_classifier_label.csv"`
 
 #### Grid Search
-❗️ Important ❗️ The last part of the notebook is an experimental part of the notebook which main functionality is to test hyperparameters 
-of the model structure. In a nutshell: grid search using TensorBoard visualization. Feel free to use it for your experiments.
+❗️ Important ❗️ The last part of the notebook is an experimental part of the notebook which main functionality is to test hyperparameters of the model structure. In a nutshell: grid search using TensorBoard visualization. Feel free to use it for your experiments.
 
 
 <img width="70%" alt="grid_search" src="https://user-images.githubusercontent.com/13486777/111295521-228d6a00-8654-11eb-937f-a15796a3024c.png">
@@ -217,7 +218,7 @@ of the model structure. In a nutshell: grid search using TensorBoard visualizati
     └─cvfpscalc.py
 </pre>
 ### app.py
-Main app which controls functionality of drone control and gesture recognition<br>
+Main app which controls the functionality of drone control and gesture recognition<br>
 App also includes mode to collect training data for adding new gestures.<br>
 
 ### keypoint_classification.ipynb
