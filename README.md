@@ -158,7 +158,8 @@ git lfs install
 git lfs pull
 ```
 
-After that, run `main.py` and press "k" to enter the mode to save key points（displayed as 「MODE:Logging Key Point」）
+After that, run `main.py` and press "k" to enter the mode to save key points
+(displayed as 「MODE:Logging Key Point」）
 
 **mode.img**
 
@@ -169,8 +170,10 @@ If you press "0" to "9", the key points will be added to "model/keypoint_classif
 
 In the initial state, 7 types of learning data are included as was shown [here](#Gesture control). If necessary, add 3 or later, or delete the existing data of csv to prepare the training data.
 ### Notebook for retraining model
-Open "[Keypoint_model_training.ipynb](Keypoint_model_training.ipynb)" in Jupyter Notebook or Google Colab.
-Change the number of training data classes,the value of "NUM_CLASSES = 3", and path to teh dataset. Then, execute all cells
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/kinivi/tello-gesture-control/blob/main/Keypoint_model_training.ipynb)
+
+Open [Keypoint_model_training.ipynb](Keypoint_model_training.ipynb) in Jupyter Notebook or Google Colab.
+Change the number of training data classes,the value of **NUM_CLASSES = 3**, and path to the dataset. Then, execute all cells
 and download `.tflite` model
 
 <img width="60%" alt="notebook_gif" src="https://user-images.githubusercontent.com/13486777/111295516-1ef9e300-8654-11eb-9f59-6f7a85b99076.gif">
@@ -179,9 +182,9 @@ and download `.tflite` model
 Do not forget to modify or add labels in `"model/keypoint_classifier/keypoint_classifier_label.csv"`
 
 #### Grid Search
+❗️ Important ❗️ The last part of the notebook is an experimental part of the notebook which main functionality is to test hyperparameters 
+of the model structure. In a nutshell: grid search using TensorBoard visualization. Feel free to use it for your experiments.
 
-The last part of the notebook is a grid search for model using TensorBoard. Run the GridSearch part of the notebook to
-get test result with different parameters
 
 <img width="60%" alt="grid_search" src="https://user-images.githubusercontent.com/13486777/111295521-228d6a00-8654-11eb-937f-a15796a3024c.png">
 

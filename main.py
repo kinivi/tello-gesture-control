@@ -140,7 +140,7 @@ def main():
         # Battery status and image rendering
         cv.putText(debug_image, "Battery: {}".format(battery_status), (5, 720 - 5),
                    cv.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
-        cv.imshow('Hand Gesture Recognition', debug_image)
+        cv.imshow('Tello Gesture Recognition', debug_image)
 
     tello.land()
     tello.end()
