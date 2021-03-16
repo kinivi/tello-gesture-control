@@ -168,7 +168,7 @@ If you press "0" to "9", the key points will be added to "model/keypoint_classif
 
 <img width="90%" alt="keypoints_table" src="https://user-images.githubusercontent.com/13486777/111295338-ec4fea80-8653-11eb-9bb3-4d27b519a14f.png">
 
-In the initial state, 7 types of learning data are included as was shown [here](#Gesture control). If necessary, add 3 or later, or delete the existing data of csv to prepare the training data.
+In the initial state, 7 types of learning data are included as was shown [here](#Gesture-control). If necessary, add 3 or later, or delete the existing data of csv to prepare the training data.
 ### Notebook for retraining model
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/kinivi/tello-gesture-control/blob/main/Keypoint_model_training.ipynb)
 
@@ -186,7 +186,7 @@ Do not forget to modify or add labels in `"model/keypoint_classifier/keypoint_cl
 of the model structure. In a nutshell: grid search using TensorBoard visualization. Feel free to use it for your experiments.
 
 
-<img width="60%" alt="grid_search" src="https://user-images.githubusercontent.com/13486777/111295521-228d6a00-8654-11eb-937f-a15796a3024c.png">
+<img width="70%" alt="grid_search" src="https://user-images.githubusercontent.com/13486777/111295521-228d6a00-8654-11eb-937f-a15796a3024c.png">
 
 
 ## Repository structure
