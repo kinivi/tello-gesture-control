@@ -110,8 +110,7 @@ The following is a list of keys and action description -
 
 * `k` -> Toggle Keyboard controls
 * `g` -> Toggle Gesture controls
-* `Left Shift` -> Take off drone #TODO
-* `Space` -> Land drone
+* `Space` -> Take off drone(if landed) **OR** Land drone(if in flight)
 * `w` -> Move forward
 * `s` -> Move back
 * `a` -> Move left

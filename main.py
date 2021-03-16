@@ -37,6 +37,7 @@ def get_args():
 
     return args
 
+
 def select_mode(key, mode):
     number = -1
     if 48 <= key <= 57:  # 0 ~ 9
@@ -49,6 +50,7 @@ def select_mode(key, mode):
         mode = 2
     return number, mode
 
+
 def main():
     # init global vars
     global gesture_buffer
@@ -59,15 +61,12 @@ def main():
     args = get_args()
     KEYBOARD_CONTROL = args.is_keyboard
     WRITE_CONTROL = False
+    in_flight = False
 
     # Camera preparation
     tello = Tello()
     tello.connect()
     tello.streamon()
-
-
-    # Take-off drone
-    tello.takeoff()
 
     cap = tello.get_frame_read()
 
@@ -107,15 +106,26 @@ def main():
         key = cv.waitKey(1) & 0xff
         if key == 27:  # ESC
             break
+        elif key == 32:  # Space
+            if not in_flight:
+                # Take-off drone
+                tello.takeoff()
+                in_flight = True
+
+            elif in_flight:
+                # Land tello
+                tello.land()
+                in_flight = False
+
         elif key == ord('k'):
-            mode=0
+            mode = 0
             KEYBOARD_CONTROL = True
             WRITE_CONTROL = False
             tello.send_rc_control(0, 0, 0, 0)  # Stop moving
         elif key == ord('g'):
             KEYBOARD_CONTROL = False
         elif key == ord('n'):
-            mode=1
+            mode = 1
             WRITE_CONTROL = True
             KEYBOARD_CONTROL = True
 
@@ -123,7 +133,6 @@ def main():
             number = -1
             if 48 <= key <= 57:  # 0 ~ 9
                 number = key - 48
-
 
         # Camera capture
         image = cap.frame
