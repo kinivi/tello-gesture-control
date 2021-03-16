@@ -29,6 +29,9 @@ def get_args():
     parser.add("--min_tracking_confidence",
                help='min_tracking_confidence',
                type=float)
+    parser.add("--buffer_len",
+               help='Length of gesture buffer',
+               type=int)
 
     args = parser.parse_args()
 
@@ -64,7 +67,7 @@ def main():
 
 
     # Take-off drone
-    # tello.takeoff()
+    tello.takeoff()
 
     cap = tello.get_frame_read()
 
@@ -74,7 +77,7 @@ def main():
 
     gesture_detector = GestureRecognition(args.use_static_image_mode, args.min_detection_confidence,
                                           args.min_tracking_confidence)
-    gesture_buffer = GestureBuffer(buffer_len=5)
+    gesture_buffer = GestureBuffer(buffer_len=args.buffer_len)
 
     def tello_control(key, keyboard_controller, gesture_controller):
         global gesture_buffer
@@ -137,7 +140,7 @@ def main():
         # Battery status and image rendering
         cv.putText(debug_image, "Battery: {}".format(battery_status), (5, 720 - 5),
                    cv.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
-        cv.imshow('Hand Gesture Recognition', debug_image)
+        cv.imshow('Tello Gesture Recognition', debug_image)
 
     tello.land()
     tello.end()

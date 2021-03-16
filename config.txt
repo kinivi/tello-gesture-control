@@ -1,6 +1,7 @@
 device = 0
 width = 960
 height = 540
-min_detection_confidence = 0.5
+min_detection_confidence = 0.7
 min_tracking_confidence = 0.5
+buffer_len = 5
 is_keyboard = True
