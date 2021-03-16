@@ -1,9 +1,10 @@
 # DJI Tello Visual Gesture control
 
-![ezgif com-optimize](https://user-images.githubusercontent.com/13486777/111168690-fb2e9280-85aa-11eb-894f-fe70633072fd.gif)
-
 The main goal of this project is to control drone using hand gestures without any gloves or additional equipment.
-Just camera on the drone or your smartphone(soon), laptop and human hand.
+Just camera on the drone or your smartphone(soon), laptop and human hand.<br>
+
+<img alt="demo_gif" src="https://user-images.githubusercontent.com/13486777/111168690-fb2e9280-85aa-11eb-894f-fe70633072fd.gif">
+
 
 ## Index
 1. [Introduction](#Introduction)
@@ -25,7 +26,8 @@ DJI Tello is a perfect drone for any kind of programming experiments. It has ric
 On the other hand - Mediapipe. It is an amazing ML platform with many robust solutions like Face mesh, Hand Keypoints detection and Objectron. Moreover, their model can be used on mobile platform with on-device acceleration.
 
 Going back to this project, here is a setup that you need:
-![starter_pack_signed](https://user-images.githubusercontent.com/13486777/111294166-b65e3680-8652-11eb-8225-c1fb1e5b867d.JPG)
+
+<img alt="starter_pack" width="80%" src="https://user-images.githubusercontent.com/13486777/111294166-b65e3680-8652-11eb-8225-c1fb1e5b867d.JPG">
 
 ## Setup
 ### 1. Installing pip packages
@@ -96,7 +98,7 @@ python3 main.py
 
 This script will start the python window with visualization like this:
 
-<img width="1072" alt="window" src="https://user-images.githubusercontent.com/13486777/111294470-09d08480-8653-11eb-895d-a8ca9f6a288d.png">
+<img width="60%" alt="window" src="https://user-images.githubusercontent.com/13486777/111294470-09d08480-8653-11eb-895d-a8ca9f6a288d.png">
 
 
 ### Keyboard control
@@ -123,8 +125,7 @@ The following is a list of keys and action description -
 
 By pressing `g` you activate gesture control mode. Here is a full list of gestures that are available now.
 
-![gestures](https://user-images.githubusercontent.com/13486777/110933057-f1035e80-8334-11eb-8458-988af973804e.JPG)
-
+<img alt="gestures_list" width="80%" src="https://user-images.githubusercontent.com/13486777/110933057-f1035e80-8334-11eb-8458-988af973804e.JPG">
 
 ## Adding new gestures
 Hand recognition detector can add and change training data to retrain the model on the own gestures. But before this,
@@ -133,18 +134,19 @@ there are technical details of the detector to understand how it works and how i
 Mediapipe Hand keypoints recognition is returning 3D coordinated of 20 hand landmarks. For our
 model we will use only 2D coordinates.
 
-![landmarks_list](https://user-images.githubusercontent.com/13486777/110933339-49d2f700-8335-11eb-9588-5f68a2677ff0.png)
+<img alt="gestures_list" width="80%" src="https://user-images.githubusercontent.com/13486777/110933339-49d2f700-8335-11eb-9588-5f68a2677ff0.png">
 
 
 Than, this points are preprocessed for training the model in the following way.
 
-![preprocessing](https://user-images.githubusercontent.com/13486777/111294503-11902900-8653-11eb-9856-a50fe96e750e.png)
+<img alt="preprocessing" width="80%" src="https://user-images.githubusercontent.com/13486777/111294503-11902900-8653-11eb-9856-a50fe96e750e.png">
 
 
 After that, we can use data to train our model. Keypoint classifier is a simple Neural network with such 
 structure
 
-![model](https://user-images.githubusercontent.com/13486777/111294522-16ed7380-8653-11eb-9fed-e472c8a9a039.png)
+<img alt="model_structure" width="80%" src="https://user-images.githubusercontent.com/13486777/111294522-16ed7380-8653-11eb-9fed-e472c8a9a039.png">
+
 
 
 _check [here](#Grid-Search) to understand how the architecture was selected_
@@ -163,7 +165,7 @@ After that, run `main.py` and press "k" to enter the mode to save key points（d
 If you press "0" to "9", the key points will be added to "model/keypoint_classifier/keypoint.csv" as shown below.
 1st column: Pressed number (class ID), 2nd and subsequent columns: Keypoint coordinates
 
-<img width="1217" alt="Screenshot 2021-03-16 at 12 34 06" src="https://user-images.githubusercontent.com/13486777/111295338-ec4fea80-8653-11eb-9bb3-4d27b519a14f.png">
+<img width="90%" alt="keypoints_table" src="https://user-images.githubusercontent.com/13486777/111295338-ec4fea80-8653-11eb-9bb3-4d27b519a14f.png">
 
 In the initial state, 7 types of learning data are included as was shown [here](#Gesture control). If necessary, add 3 or later, or delete the existing data of csv to prepare the training data.
 ### Notebook for retraining model
@@ -171,7 +173,7 @@ Open "[Keypoint_model_training.ipynb](Keypoint_model_training.ipynb)" in Jupyter
 Change the number of training data classes,the value of "NUM_CLASSES = 3", and path to teh dataset. Then, execute all cells
 and download `.tflite` model
 
-![notebook](https://user-images.githubusercontent.com/13486777/111295516-1ef9e300-8654-11eb-9f59-6f7a85b99076.gif)
+<img width="60%" alt="notebook_gif" src="https://user-images.githubusercontent.com/13486777/111295516-1ef9e300-8654-11eb-9f59-6f7a85b99076.gif">
 
 
 Do not forget to modify or add labels in `"model/keypoint_classifier/keypoint_classifier_label.csv"`
@@ -181,7 +183,7 @@ Do not forget to modify or add labels in `"model/keypoint_classifier/keypoint_cl
 The last part of the notebook is a grid search for model using TensorBoard. Run the GridSearch part of the notebook to
 get test result with different parameters
 
-<img width="700" alt="grid_search" src="https://user-images.githubusercontent.com/13486777/111295521-228d6a00-8654-11eb-937f-a15796a3024c.png">
+<img width="60%" alt="grid_search" src="https://user-images.githubusercontent.com/13486777/111295521-228d6a00-8654-11eb-937f-a15796a3024c.png">
 
 
 ## Repository structure
