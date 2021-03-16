@@ -104,7 +104,7 @@ This script will start the python window with visualization like this:
 
 
 ### Keyboard control
-(To control the drone with your keyboard, first press the `Left Shift` key.)
+To control the drone with your keyboard at any time - press the `k` key.
 
 The following is a list of keys and action description -
 
