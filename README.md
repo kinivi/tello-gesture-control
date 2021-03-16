@@ -159,11 +159,12 @@ git lfs pull
 ```
 
 After that, run `main.py` and press "k" to enter the mode to save key points
-(displayed as 「MODE:Logging Key Point」）
+(displayed as **MODE:Logging Key Point**）
 
-**mode.img**
+<img width="60%" alt="writing_mode" src="https://user-images.githubusercontent.com/13486777/111301228-a185a100-865a-11eb-8a3c-fa4d9ee96d6a.png">
 
-If you press "0" to "9", the key points will be added to "model/keypoint_classifier/keypoint.csv" as shown below.
+
+If you press "0" to "9", the key points will be added to [model/keypoint_classifier/keypoint.csv](model/keypoint_classifier/keypoint.csv) as shown below.<br>
 1st column: Pressed number (class ID), 2nd and subsequent columns: Keypoint coordinates
 
 <img width="90%" alt="keypoints_table" src="https://user-images.githubusercontent.com/13486777/111295338-ec4fea80-8653-11eb-9bb3-4d27b519a14f.png">
