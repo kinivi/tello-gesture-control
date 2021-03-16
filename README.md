@@ -1,6 +1,9 @@
 # DJI Tello Visual Gesture control
 
-## Contains of the repo
+![ezgif com-optimize](https://user-images.githubusercontent.com/13486777/111168690-fb2e9280-85aa-11eb-894f-fe70633072fd.gif)
+
+The main goal of this project is to control drone using hand gestures without any gloves or additional equipment.
+Just camera on the drone or your smartphone(soon), laptop and human hand.
 
 ## Index
 1. [Introduction](#Introduction)
@@ -15,15 +18,14 @@
     * [Creating dataset](#Creating-dataset-with-new-gestures)
     * [Retrain model](#Notebook-for-retraining-model)
 5. [Repository structure](#Repository-structure)
-    
+
 ## Introduction
+This project lies on two main parts - DJI Tello drone and Mediapipe fast hand keypoints recognition.<br> 
+DJI Tello is a perfect drone for any kind of programming experiments. It has rich Python API (also Swift is available) which helps to almost fully control drone and utilise its camera for Computer vision.<br>
+On the other hand - Mediapipe. It is an amazing ML platform with many robust solutions like Face mesh, Hand Keypoints detection and Objectron. Moreover, their model can be used on mobile platform with on-device acceleration.
 
-![ezgif com-optimize](https://user-images.githubusercontent.com/13486777/111168690-fb2e9280-85aa-11eb-894f-fe70633072fd.gif)
-
-The main goal of this project is to control drone using hand gestures without any gloves or additional equipment.
-Just camera on the drone or your smartphone(soon), laptop and human hand.
-
-**laptop+drone+hand.img**
+Going back to this project, here is a setup that you need:
+![starter_pack_signed](https://user-images.githubusercontent.com/13486777/111294166-b65e3680-8652-11eb-8225-c1fb1e5b867d.JPG)
 
 ## Setup
 ### 1. Installing pip packages
@@ -94,7 +96,8 @@ python3 main.py
 
 This script will start the python window with visualization like this:
 
-**WINDOW.img**
+<img width="1072" alt="window" src="https://user-images.githubusercontent.com/13486777/111294470-09d08480-8653-11eb-895d-a8ca9f6a288d.png">
+
 
 ### Keyboard control
 (To control the drone with your keyboard, first press the `Left Shift` key.)
@@ -135,12 +138,14 @@ model we will use only 2D coordinates.
 
 Than, this points are preprocessed for training the model in the following way.
 
-**preprocessing.png**
+![preprocessing](https://user-images.githubusercontent.com/13486777/111294503-11902900-8653-11eb-9856-a50fe96e750e.png)
+
 
 After that, we can use data to train our model. Keypoint classifier is a simple Neural network with such 
 structure
 
-**neural_network_structure.png** 
+![model](https://user-images.githubusercontent.com/13486777/111294522-16ed7380-8653-11eb-9fed-e472c8a9a039.png)
+
 
 _check [here](#Grid-Search) to understand how the architecture was selected_
 ### Creating dataset with new gestures
@@ -156,9 +161,9 @@ After that, run `main.py` and press "k" to enter the mode to save key points（d
 **mode.img**
 
 If you press "0" to "9", the key points will be added to "model/keypoint_classifier/keypoint.csv" as shown below.
-1st column: Pressed number (used as class ID), 2nd and subsequent columns: Key point coordinates
+1st column: Pressed number (class ID), 2nd and subsequent columns: Keypoint coordinates
 
-**table.img**
+<img width="1217" alt="Screenshot 2021-03-16 at 12 34 06" src="https://user-images.githubusercontent.com/13486777/111295338-ec4fea80-8653-11eb-9bb3-4d27b519a14f.png">
 
 In the initial state, 7 types of learning data are included as was shown [here](#Gesture control). If necessary, add 3 or later, or delete the existing data of csv to prepare the training data.
 ### Notebook for retraining model
@@ -166,7 +171,8 @@ Open "[Keypoint_model_training.ipynb](Keypoint_model_training.ipynb)" in Jupyter
 Change the number of training data classes,the value of "NUM_CLASSES = 3", and path to teh dataset. Then, execute all cells
 and download `.tflite` model
 
-**showgif.gif**
+![notebook](https://user-images.githubusercontent.com/13486777/111295516-1ef9e300-8654-11eb-9f59-6f7a85b99076.gif)
+
 
 Do not forget to modify or add labels in `"model/keypoint_classifier/keypoint_classifier_label.csv"`
 
@@ -175,7 +181,8 @@ Do not forget to modify or add labels in `"model/keypoint_classifier/keypoint_cl
 The last part of the notebook is a grid search for model using TensorBoard. Run the GridSearch part of the notebook to
 get test result with different parameters
 
-**grid_search.img**
+<img width="700" alt="grid_search" src="https://user-images.githubusercontent.com/13486777/111295521-228d6a00-8654-11eb-937f-a15796a3024c.png">
+
 
 ## Repository structure
 <pre>
