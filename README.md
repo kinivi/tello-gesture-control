@@ -146,7 +146,7 @@ Then, these points are preprocessed for training the model in the following way.
 After that, we can use data to train our model. Keypoint classifier is a simple Neural network with such 
 structure
 
-<img alt="model_structure" width="80%" src="https://user-images.githubusercontent.com/13486777/111294522-16ed7380-8653-11eb-9fed-e472c8a9a039.png">
+<img alt="model_structure" width="80%" src="https://user-images.githubusercontent.com/13486777/112172879-c0a5a500-8bfd-11eb-85b3-34ccfa256ec3.jpg">
 
 
 
