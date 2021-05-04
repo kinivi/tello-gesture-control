@@ -58,7 +58,7 @@ Turn on drone and connect computer to its WiFi
 Next, run the following code to verify connectivity
 
 ```sh
-python3 tests/test_connection.py
+python3 tests/connection_test.py
 ```
 
 On successful connection
