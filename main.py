@@ -107,15 +107,18 @@ def main():
         if key == 27:  # ESC
             break
         elif key == 32:  # Space
-            if not in_flight:
-                # Take-off drone
-                tello.takeoff()
-                in_flight = True
+            try:
+                if not in_flight:
+                    # Take-off drone
+                    tello.takeoff()
+                    in_flight = True
 
-            elif in_flight:
-                # Land tello
-                tello.land()
-                in_flight = False
+                elif in_flight:
+                    # Land tello
+                    tello.land()
+                    in_flight = False
+            except:
+                pass
 
         elif key == ord('k'):
             mode = 0
