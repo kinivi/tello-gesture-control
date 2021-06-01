@@ -88,7 +88,10 @@ def main():
 
     def tello_battery(tello):
         global battery_status
-        battery_status = tello.get_battery()
+        try:
+            battery_status = tello.get_battery()[:-2]
+        except:
+            battery_status = -1
 
     # FPS Measurement
     cv_fps_calc = CvFpsCalc(buffer_len=10)
