@@ -1,5 +1,9 @@
 # DJI Tello Hand Gesture control
+-------
 
+🏆 This project featured in [Official Google Dev Blog](https://developers.googleblog.com/2021/09/drone-control-via-gestures-using-mediapipe-hands.html)
+
+-------
 The main goal of this project is to control the drone using hand gestures without any gloves or additional equipment.
 Just camera on the drone or your smartphone(soon), laptop and human hand.<br>
 
